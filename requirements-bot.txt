@@ -1,0 +1,5 @@
+Flask
+requests
+beautifulsoup4
+python-telegram-bot>=21.0
+user-agent>=0.1.10
