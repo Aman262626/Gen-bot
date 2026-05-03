@@ -7,6 +7,7 @@ A Telegram bot and Flask API that generates AI images from text prompts.
 - **Telegram Bot** (`bot.py`) — Send a text description and receive an AI-generated image.
 - **Flask API** (`gen.py`) — HTTP endpoint for image generation.
 - **Shared image generation module** (`image_gen.py`) — Reusable logic used by both the bot and the API.
+- **Admin controls** — Admin-only commands for bot statistics and management.
 
 ## Setup
 
@@ -22,10 +23,11 @@ pip install -r requirements.txt
 2. Send `/newbot` and follow the prompts.
 3. Copy the token you receive.
 
-### 3. Set the environment variable
+### 3. Set environment variables
 
 ```bash
 export TELEGRAM_BOT_TOKEN="your-token-here"
+export TELEGRAM_ADMIN_ID="your-telegram-user-id"
 ```
 
 ### 4. Run the Telegram bot
@@ -56,6 +58,13 @@ curl "http://localhost:5000/img?prompt=a+cat+in+space"
 | `/help` | Usage instructions |
 | `/img <prompt>` | Generate an image from a text description |
 | *(any text)* | Also generates an image |
+
+### Admin Commands
+
+| Command | Description |
+|---------|-------------|
+| `/stats` | Show bot statistics |
+| `/broadcast <msg>` | Broadcast a message (coming soon) |
 
 ## Project Structure
 
