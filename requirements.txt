@@ -3,3 +3,6 @@ requests
 beautifulsoup4
 python-telegram-bot>=21.0
 user-agent>=0.1.10
+phonenumbers>=8.13.0
+qrcode[pil]>=7.4
+Pillow>=10.0
