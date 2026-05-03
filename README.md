@@ -30,7 +30,7 @@ The project is configured for Vercel deployment out of the box.
 ### 1. Install dependencies
 
 ```bash
-pip install -r requirements.txt
+pip install -r requirements-bot.txt
 ```
 
 ### 2. Get a Telegram Bot Token
@@ -72,8 +72,9 @@ Gen-bot/
   gen.py           # Image generation Flask API
   gpt.py           # Console AI chatbot
   image_gen.py     # Shared image generation logic
-  vercel.json      # Vercel deployment config
-  requirements.txt
+  vercel.json          # Vercel deployment config
+  requirements.txt     # Vercel dependencies (Flask, requests, bs4)
+  requirements-bot.txt # All dependencies (includes telegram bot)
   .gitignore
   README.md
 ```
