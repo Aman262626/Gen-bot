@@ -19,10 +19,15 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", "")
+ADMIN_ID = int(os.environ.get("TELEGRAM_ADMIN_ID", "0"))
+
+
+def _is_admin(user_id: int) -> bool:
+    return ADMIN_ID != 0 and user_id == ADMIN_ID
 
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    await update.message.reply_text(
+    text = (
         "Welcome to Gen-bot!\n\n"
         "Send me a text description and I will generate an AI image for you.\n\n"
         "Commands:\n"
@@ -30,6 +35,13 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         "/help - Show help\n"
         "/img <prompt> - Generate an image from a text prompt"
     )
+    if _is_admin(update.effective_user.id):
+        text += (
+            "\n\nAdmin commands:\n"
+            "/stats - Show bot statistics\n"
+            "/broadcast <message> - Broadcast a message (coming soon)"
+        )
+    await update.message.reply_text(text)
 
 
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -75,6 +87,25 @@ async def _generate_and_send(update: Update, prompt: str) -> None:
         await update.message.reply_text("Could not generate an image. Please try a different prompt.")
 
 
+async def stats_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    if not _is_admin(update.effective_user.id):
+        await update.message.reply_text("This command is only available to the bot admin.")
+        return
+    await update.message.reply_text(
+        "Bot Statistics:\n"
+        f"  Bot is running\n"
+        f"  Admin ID: {ADMIN_ID}\n"
+        f"  Your ID: {update.effective_user.id}"
+    )
+
+
+async def broadcast_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    if not _is_admin(update.effective_user.id):
+        await update.message.reply_text("This command is only available to the bot admin.")
+        return
+    await update.message.reply_text("Broadcast feature coming soon!")
+
+
 async def error_handler(update: object, context: ContextTypes.DEFAULT_TYPE) -> None:
     logger.error("Update %s caused error: %s", update, context.error)
 
@@ -91,6 +122,8 @@ def main() -> None:
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CommandHandler("help", help_command))
     app.add_handler(CommandHandler("img", img_command))
+    app.add_handler(CommandHandler("stats", stats_command))
+    app.add_handler(CommandHandler("broadcast", broadcast_command))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, text_message))
     app.add_error_handler(error_handler)
 
